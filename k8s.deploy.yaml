@@ -35,7 +35,7 @@ spec:
     spec:
       containers:
       - name: invokeclient
-        image: testdanielaaa.azurecr.io/daniel/dapr-client:v2
+        image: nikawang.azurecr.io/dapr/dapr-client:v4
         ports:
         - containerPort: 8080
         imagePullPolicy: Always

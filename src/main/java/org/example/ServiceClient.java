@@ -14,6 +14,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import io.dapr.client.DaprClient;
 import io.dapr.client.DaprClientBuilder;
 import io.dapr.client.domain.HttpExtension;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 /**
  * Service for input binding example.
  * 1. From your repo root, build and install jars:
@@ -24,26 +27,31 @@ import io.dapr.client.domain.HttpExtension;
  *   -- java -jar target/dapr-java-sdk-examples-exec.jar io.dapr.examples.bindings.http.InputBindingExample -p 3000
  */
 @SpringBootApplication
+@RestController
 public class ServiceClient {
-
-  public static void main(String[] args) throws Exception {
     String SERVICE_APP_ID = "output";
     String METHOD = "say";
     String message = "Tom";
-    
     DaprClient client = new DaprClientBuilder().build();
-    int count=0; 
-      while(true) {
+    int count =0 ;
+    @RequestMapping("/invoke")
+    public String invoke() {
+//        int count=0;
+//        while(true) {
         count++;
-       byte[] response = client.invokeMethod(SERVICE_APP_ID, METHOD, message+count, HttpExtension.POST, null,
-            byte[].class).block();
+        byte[] response = client.invokeMethod(SERVICE_APP_ID, METHOD, message + count, HttpExtension.POST, null,
+                byte[].class).block();
         System.out.println(new String(response));
-        try {
-          Thread.sleep((long) (10000 * Math.random()));
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-          Thread.currentThread().interrupt();
-        }
+        return "response";
+
+    }
+
+  public static void main(String[] args)  {
+//    String SERVICE_APP_ID = "output";
+//    String METHOD = "say";
+//    String message = "Tom";
+    SpringApplication.run(ServiceClient.class, args);
+//    DaprClient client = new DaprClientBuilder().build();
+
       }
     }
-  }
